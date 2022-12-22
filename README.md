@@ -6,6 +6,6 @@ Si tratta sostanzialmente un RSS reader che al momento dell'esecuzione opera un 
 L'esecuzione dello script è unica, e per far sì che il controllo avvenga periodicamente (ogni 2 minuti è già più che sufficiente) vi è la necessità di impostare un ``cronjob`` o una soluzione analoga.
 
 ## Replit Version
-Il file ``replit.py`` contine invece una versione dello script ideata per l'hosting **più che spartano** su Replit. L'idea di base è eseguire lo script alla ricezione di richieste HTTP che vengono inviate molto frequentemente da [UptimeRobot](https://uptimerobot.com/) a ``https://maffuccibot.sdoublesm.repl.co/`` e di successivo feedback ``200 OK``.
+Il file ``replit.py`` contine invece una versione dello script ideata per l'hosting **più che spartano** su Replit. L'idea di base è eseguire lo script alla ricezione di richieste HTTP, che vengono inviate molto frequentemente da [UptimeRobot](https://uptimerobot.com/) a ``https://maffuccibot.sdoublesm.repl.co/``, e di successivo feedback ``200 OK``.
 ## Screenshot
 ![Screenshot](/screenshot.jpg "screenshot")
