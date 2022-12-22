@@ -1,0 +1,9 @@
+[Unit]
+Description=Run Maffucci-RSS bot on Telegram (TIMER)
+
+[Timer]
+OnCalendar=*:0/5
+AccuracySec=1s
+
+[Install]
+WantedBy=timers.target

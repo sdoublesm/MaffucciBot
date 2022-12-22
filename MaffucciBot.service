@@ -1,0 +1,9 @@
+[Unit]
+Description=Run Maffucci-RSS bot on Telegram
+
+[Service]
+Type=oneshot
+ExecStart=/home/pi/Desktop/MaffucciBot/runMaffucciBot.sh
+
+[Install]
+WantedBy=multi-user.target
