@@ -1,5 +1,4 @@
 # MaffucciBot
-
 Bot che, al momento della pubblicazione di un nuovo articolo sul sito web dell'Istituto Maffucci di Calitri, invia una notifica sul canale Telegram [@IstitutoMaffucci](https://t.me/IstitutoMaffucci).
 ---
 Si tratta sostanzialmente un RSS reader che al momento dell'esecuzione opera un controllo sui link presenti nel feed RSS del sito web dell'Istituto (disponibile al link https://istitutosuperioremaffucci.edu.it/feed/) e li confronta con quelli presenti nel "database", che non è altro che il file ``.txt`` denominato ``feed_datab.txt``.
