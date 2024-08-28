@@ -1,32 +1,45 @@
-#------------------------------------------------------------------------
-#   RSS Feed Reader Bot for Istituto Maffucci's Official Telegram channel. 
-#   Created by Mirko Tenore in 2020.
-#------------------------------------------------------------------------  
+# 
+# RSS Feed Updates Bot for Istituto Maffucci
+# created by @sdoublesm in 2020
+#
 
-import os
 import telepot
 from datetime import datetime
 import feedparser
-import pyshorteners
-import socket
+
+import cssutils
+import urllib.request
+from bs4 import BeautifulSoup
+import re
+
 import yaml
 secrets = yaml.safe_load(open("secrets.yml"))
-
-# link shortner init
-bitly_token = secrets["bitly_token"]
-s = pyshorteners.Shortener(api_key=bitly_token)
+access_tokens = [secrets["bitly_token"]]
 
 # setting up
 token = secrets["bot_token"]
 bot = telepot.Bot(token)
 FEED_URL = 'https://istitutosuperioremaffucci.edu.it/feed/'
-channel_id = "-1001153133800" #testing 1559810700  -- real 1153133800
+channel_id = "-1001559810700" #  testing 1559810700 -- real 1153133800
 
 # write urls on the database
-def writeOnDatabase():
+def writeOnDatabase(url):
     f = open('feed_datab.txt', 'a')
     f.write("- {}\n".format(url))
     f.close()
+
+def getbackground(url):
+    html = urllib.request.urlopen(url).read()
+    soup = BeautifulSoup(html, features="lxml")
+    div_style = soup.find('section')['style']
+    style = cssutils.parseStyle(div_style)['background']
+    res = re.search("(?P<url>https?://[^\s]+)", style).group("url").replace(")", "").replace(" ", "")
+    if(res!="https://istitutosuperioremaffucci.edu.it/wp-content/uploads/2020/03/person-984236_1280.jpg"):
+        url = res
+    else:
+        url = "https://i.ibb.co/5YwRTdk/person-984236-1280-1.jpg"
+    
+    return url
 
 # check if it's a new article
 def isNewUrl(urlstr, urls):
@@ -45,21 +58,28 @@ def main():
     f.close()
 
     for articles in rss_feed["entries"][::-1]:
-
         # metas
         title = articles['title']
         url = articles['links'][0]['href']
+        short = articles['id']
+        tagstr = ""
+        for tags in articles["tags"]:
+            tag = tags["term"].replace(" ", "")
+            tagstr = tagstr + " #" + tag
 
+        
         # if there is a new url in the feed, send news to the Telegram channel
         if isNewUrl(url, urls):
-            writeOnDatabase()
-            bitly_link = s.bitly.short(url)
-            short = bitly_link.replace('https://', '')
+            imageurl=getbackground(url)
+            print("[", getbackground(url), "]")
+            #writeOnDatabase(url)
+            #cover_link = "https://i.ibb.co/5YwRTdk/person-984236-1280-1.jpg"
+            short = short.replace('https://', '')
             bot.sendMessage(
                 chat_id=channel_id,
                 text=
-                '*📋 {}*\n📚 Istituto Maffucci di Calitri (AV)\n[⠀](https://i.ibb.co/5YwRTdk/person-984236-1280-1.jpg)\n🔗 *Link*: {}'
-                .format(title, short),
+                '*📋 {}*\n[ ]({})\n🔗 *Link*: {} 👈🏼\n\n📚 Istituto Maffucci di Calitri\n🏷️{} | @IstitutoMaffucci\n\n'
+                .format(title, imageurl, short, tagstr),
                 parse_mode='Markdown',
                 disable_web_page_preview=False,
                 disable_notification=False)
@@ -67,4 +87,5 @@ def main():
         else:
             pass
 
-main()
+if __name__ == '__main__':
+    main()

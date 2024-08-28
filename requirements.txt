@@ -1,3 +1,10 @@
 telepot==12.7
 feedparser==6.0.1
-pyshorteners==1.0.1
+lxml==4.9.3
+cssutils==2.11.1
+beautifulsoup4
+urllib3==2.2.2
+async-timeout==4.0.3
+asyncio==3.4.3
+PyYAML==6.0.2
+aiogram==3.11.0
